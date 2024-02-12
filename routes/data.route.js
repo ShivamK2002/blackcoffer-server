@@ -5,9 +5,12 @@ require("dotenv").config();
 mongoose.connect(process.env.MY_MONGO_URL);
 
 const dataRouter = express.Router();
+
 dataRouter.get("/", async (req, res) => {
   try {
-    let data = await DataModel.find().limit(6);
+    let limit = req.query.limit;
+    if (limit === undefined) limit = 10;
+    let data = await DataModel.find().limit(limit);
     res.send(data);
     console.log(data);
   } catch (error) {
